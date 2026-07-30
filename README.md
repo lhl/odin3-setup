@@ -607,6 +607,16 @@ At the time of this review, the latest release was **v5.1.8**. A newer release s
 | 2026-07-30 | 80 Days / Steam `381780` | TODO | TODO | Keyboard/mouse input works, but no usable native Odin controller path was observed; configure and validate Steam Input or a GameNative physical-controller mapping | TODO | TODO | **Game launches and runs** |
 | 2026-07-30 | Cairn / Steam `1588550` | TODO | TODO | Medium graphics preset; no graphical workaround recorded | **≈11 W** | **60 FPS** | **Runs with major graphical glitches:** mountain surfaces appear striped, and sunlight can blow out the entire image to white |
 | 2026-07-30 | Delores: A Thimbleweed Park Mini-Adventure / Steam `1305720` | TODO | TODO | Same input limitation as 80 Days: configure and validate a controller-to-keyboard/mouse mapping | TODO | TODO | **Game launches and runs** |
+| 2026-07-30 | STEINS;GATE / Steam `412830` | TODO | TODO | 1280×720 container; **Unpack Files** enabled; FEXCore 2605; launcher set to Windowed, then Full Screen selected from the game's own menu after launch | **<2 W** | **60 FPS** | **Works after substantial configuration.** Does not require the Steam client with Unpack enabled; selecting Full Screen in the external launcher produces a black screen |
+
+##### STEINS;GATE launch sequence
+
+1. Leave the official executable as `Launcher.exe`; launching `Game.exe` directly stops with “Please launch from launcher.”
+2. In **Edit Container**, use a 1280×720 screen, enable **Unpack Files**, and select FEXCore 2605. The tested unpacked path removes the launcher's Steam Application Load Error without running the full Steam client.
+3. In `Launcher.exe`, select **Windowed**. Center the window if necessary and start the game.
+4. Only after the game itself has launched, select **Full Screen from the game's own menu**. This fills the display correctly.
+5. Do **not** select Full Screen in the external launcher: that path renders a black screen even though audio starts.
+6. The resulting configuration was measured at under 2 W and 60 FPS. Re-check the Unpack state after a game update or file verification before diagnosing a regression.
 
 ### GameNative compatibility-problem log
 
@@ -806,7 +816,7 @@ These are reports, not proof that every Odin 3 or every build is affected. Revie
 | 2026-07-30 | XenDroid | TODO / installed | App installed | Xbox 360 configuration and game test pending |
 | 2026-07-30 | Argosy | v2.4.1 / evaluated | First-run flow tested | Not selected: current app requires RomM login and exposes no server-free onboarding path |
 | 2026-07-30 | NeoStation | TODO / installed | ROM root and GameNative Steam Frontend Sync configured | `.steam` marker discovery/integration confirmed; version and per-emulator launch tests pending |
-| 2026-07-30 | GameNative | TODO / installed | Steam Frontend Sync and initial game testing | 140, 2064: Read Only Memories, Celeste, and FFVII Remake Intergrade work out of the box; Cairn runs at 60 FPS but has major lighting/terrain glitches; 80 Days and Delores work with keyboard/mouse; OlliOlli fails across recorded Proton and driver tests; cloud-save tests pending |
+| 2026-07-30 | GameNative | TODO / installed | Steam Frontend Sync and initial game testing | 140, 2064: Read Only Memories, Celeste, and FFVII Remake Intergrade work out of the box; STEINS;GATE works after an Unpack/windowed-to-in-game-fullscreen workaround; Cairn has major glitches; 80 Days and Delores need keyboard/mouse; OlliOlli fails; cloud-save tests pending |
 | TODO | GameHub Lite | TODO / not installed | Fallback test | TODO |
 | TODO | ClusterTune | TODO / not installed | CPU-cap test | Not in use; do not run alongside PULSE |
 | 2026-07-30 | PULSE | TODO / installed | Frequency/power profile configured | Active: 60 FPS target, Aggressive Park, Efficient 11 W, Smart Fan, and 60 Hz |
