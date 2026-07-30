@@ -632,6 +632,7 @@ Record every attempt with a date and change only one variable between runs. “C
 | Date | Game/source | Compatibility evidence | Config/runtime tests | Graphics/translation tests | Observed result | Next evidence/action |
 | --- | --- | --- | --- | --- | --- | --- |
 | 2026-07-30 | OlliOlli / Steam `274250` | GameNative labels it compatible, but the API result checked this date was only a **fallback**: GOG build on Adreno 650, not Steam on Adreno 830 | Both default and manually applied known config; Proton 9, 10, and 11 | Adreno `v805`, `Turnip_Gen8_V25`, and Turnip Gen8 V30; baseline Vulkan with DXVK `2.4.1-gplasync` | Every tested combination failed: either a launch crash or black screen | Run **Play with Diagnostics**, share/inspect the diagnostic log, record the exact GameNative/runtime package versions and failure stage, then test any wrapper change separately |
+| 2026-07-30 | POOLS / Steam `2663530` | No working Odin 3 configuration recorded | TODO | Multiple GPU drivers tested; exact versions TODO | Game appears to run at **<3 W**, but rendering remains completely black with every tested driver | Run **Play with Diagnostics**; record the tested Proton, wrapper, and driver versions and whether menus/audio/input operate behind the black image |
 
 ### Storage interaction with Armada
 
