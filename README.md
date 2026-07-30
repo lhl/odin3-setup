@@ -589,29 +589,29 @@ At the time of this review, the latest release was **v5.1.8**. A newer release s
 
 ### GameNative working-game logs
 
-“Out of the box” means the installed game launched and was playable with the Odin controls without a manual per-game runtime, driver, wrapper, or input override beyond GameNative's automatically or explicitly applied known config; note when that config was required. Still record the effective component versions later: changing GameNative's global defaults can make two nominally default installations different. Power and performance are observed results, not controlled benchmarks, until the Odin performance/fan mode, brightness, resolution, frame cap, measurement source, and test duration are also recorded.
+“Out of the box” means the installed game launched and was playable with the Odin controls without a manual per-game runtime, driver, wrapper, or input override beyond GameNative's automatically or explicitly applied known config; note when that config was required. Still record the effective component versions later: changing GameNative's global defaults can make two nominally default installations different. **Install location** means internal storage or microSD; **installed size** means the observed per-game footprint and excludes shared GameNative runtime/container data unless stated otherwise. Power and performance are observed results, not controlled benchmarks, until the Odin performance/fan mode, brightness, resolution, frame cap, measurement source, and test duration are also recorded.
 
 #### Fully working out of the box
 
-| Test date | Game/source | GameNative version | Storage | Per-game changes | Observed power | Performance | Result/notes |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026-07-30 | 140 / Steam `242820` | TODO | TODO | None | **≈2 W** | **60 FPS** | **Fully working out of the box** |
-| 2026-07-30 | 2064: Read Only Memories / Steam `330820` | TODO | TODO | None | **<2 W** | **60 FPS** | **Fully working out of the box** |
-| 2026-07-30 | Celeste / Steam `504230` | TODO | TODO | None | **<2 W** | **60 FPS** | **Fully working out of the box** |
-| 2026-07-30 | DuckTales: Remastered / Steam `237630` | TODO | TODO | Known config applied; no additional manual changes | **≈2 W** | **60 FPS** | **Fully working out of the box with known config** |
-| 2026-07-30 | FINAL FANTASY VII REMAKE INTERGRADE / Steam `1462040` | TODO | TODO | None | TODO | TODO | **Fully working out of the box** |
+| Test date | Game/source | GameNative version | Install location | Installed size | Per-game changes | Observed power | Performance | Result/notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-07-30 | 140 / Steam `242820` | TODO | TODO | TODO | None | **≈2 W** | **60 FPS** | **Fully working out of the box** |
+| 2026-07-30 | 2064: Read Only Memories / Steam `330820` | TODO | TODO | TODO | None | **<2 W** | **60 FPS** | **Fully working out of the box** |
+| 2026-07-30 | Celeste / Steam `504230` | TODO | TODO | TODO | None | **<2 W** | **60 FPS** | **Fully working out of the box** |
+| 2026-07-30 | DuckTales: Remastered / Steam `237630` | TODO | TODO | TODO | Known config applied; no additional manual changes | **≈2 W** | **60 FPS** | **Fully working out of the box with known config** |
+| 2026-07-30 | FINAL FANTASY VII REMAKE INTERGRADE / Steam `1462040` | TODO | TODO | TODO | None | TODO | TODO | **Fully working out of the box** |
 
 #### Working with configuration or caveats
 
-| Test date | Game/source | GameNative version | Storage | Required configuration/caveat | Observed power | Performance | Result/notes |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026-07-30 | 80 Days / Steam `381780` | TODO | TODO | Keyboard/mouse input works, but no usable native Odin controller path was observed; configure and validate Steam Input or a GameNative physical-controller mapping | TODO | TODO | **Game launches and runs** |
-| 2026-07-30 | Analogue: A Hate Story / Steam `209370` | TODO | TODO | Keyboard-focused interface, including a simulated command line; no handheld-friendly mapping recorded | **≈2–3 W** | Frame rate fluctuates substantially despite very low CPU/GPU utilization | **Technically works, but is a poor fit for controller-first handheld play.** Installed size: **≈118 MB**. The frame-rate variation has no observed practical impact on this interface-driven game |
-| 2026-07-30 | Cairn / Steam `1588550` | TODO | TODO | Medium graphics preset; no graphical workaround recorded | **≈11 W** | **60 FPS** | **Runs with major graphical glitches:** mountain surfaces appear striped, and sunlight can blow out the entire image to white |
-| 2026-07-30 | Delores: A Thimbleweed Park Mini-Adventure / Steam `1305720` | TODO | TODO | Same input limitation as 80 Days: configure and validate a controller-to-keyboard/mouse mapping | TODO | TODO | **Game launches and runs** |
-| 2026-07-30 | Hyper Light Drifter / Steam `257850` | TODO | TODO | Proton 11 ARM64EC; Turnip Gen8 V30; FEXCore 2605 | **≈2–3 W** | **60 FPS** | **Works well with the recorded configuration.** The previous configuration consumed ≈9 W and could not sustain 60 FPS |
-| 2026-07-30 | Koral / Steam `896750` | TODO | TODO | Effective configuration TODO; audio is completely absent | **≈4 W** | **60 FPS** | **Runs smoothly but without sound; XAudio troubleshooting pending** |
-| 2026-07-30 | STEINS;GATE / Steam `412830` | TODO | TODO | Started from **Use Known Config** (including Proton 9 ARM64EC and System GPU driver); 1280×720 container; **Unpack Files** enabled; FEXCore updated to 2605; launcher set to Windowed, then Full Screen selected from the game's own menu after launch | **<2 W** | **60 FPS** | **Works after substantial configuration.** Does not require the Steam client with Unpack enabled; selecting Full Screen in the external launcher produces a black screen |
+| Test date | Game/source | GameNative version | Install location | Installed size | Required configuration/caveat | Observed power | Performance | Result/notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-07-30 | 80 Days / Steam `381780` | TODO | TODO | TODO | Keyboard/mouse input works, but no usable native Odin controller path was observed; configure and validate Steam Input or a GameNative physical-controller mapping | TODO | TODO | **Game launches and runs** |
+| 2026-07-30 | Analogue: A Hate Story / Steam `209370` | TODO | TODO | **≈118 MB** | Keyboard-focused interface, including a simulated command line; no handheld-friendly mapping recorded | **≈2–3 W** | Frame rate fluctuates substantially despite very low CPU/GPU utilization | **Technically works, but is a poor fit for controller-first handheld play.** The frame-rate variation has no observed practical impact on this interface-driven game |
+| 2026-07-30 | Cairn / Steam `1588550` | TODO | TODO | TODO | Medium graphics preset; no graphical workaround recorded | **≈11 W** | **60 FPS** | **Runs with major graphical glitches:** mountain surfaces appear striped, and sunlight can blow out the entire image to white |
+| 2026-07-30 | Delores: A Thimbleweed Park Mini-Adventure / Steam `1305720` | TODO | TODO | TODO | Same input limitation as 80 Days: configure and validate a controller-to-keyboard/mouse mapping | TODO | TODO | **Game launches and runs** |
+| 2026-07-30 | Hyper Light Drifter / Steam `257850` | TODO | TODO | TODO | Proton 11 ARM64EC; Turnip Gen8 V30; FEXCore 2605 | **≈2–3 W** | **60 FPS** | **Works well with the recorded configuration.** The previous configuration consumed ≈9 W and could not sustain 60 FPS |
+| 2026-07-30 | Koral / Steam `896750` | TODO | TODO | TODO | Effective configuration TODO; audio is completely absent | **≈4 W** | **60 FPS** | **Runs smoothly but without sound; XAudio troubleshooting pending** |
+| 2026-07-30 | STEINS;GATE / Steam `412830` | TODO | TODO | TODO | Started from **Use Known Config** (including Proton 9 ARM64EC and System GPU driver); 1280×720 container; **Unpack Files** enabled; FEXCore updated to 2605; launcher set to Windowed, then Full Screen selected from the game's own menu after launch | **<2 W** | **60 FPS** | **Works after substantial configuration.** Does not require the Steam client with Unpack enabled; selecting Full Screen in the external launcher produces a black screen |
 
 ##### STEINS;GATE launch sequence
 
