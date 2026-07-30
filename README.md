@@ -11,6 +11,7 @@ Personal setup record and recovery runbook for the AYN Odin 3.
 
 - **Android:** primary general-purpose OS.
 - **Emulation on Android:** use the official stable AArch64 build of [RetroArch](https://www.retroarch.com/?page=platforms) for classic systems, standalone emulators for newer systems, and [Obtainium](https://github.com/ImranR98/Obtainium) to track trusted upstream APKs.
+- **Android game launcher:** use GPL-3.0 **[NeoStation](https://github.com/misobadev/neostation-frontend)** for the unified controller-first library and GameNative frontend-sync integration; retain GameNative and every emulator as independently usable apps.
 - **PC games on Android:** start with [GameNative](https://github.com/utkarshdalal/GameNative); keep [GameHub Lite](https://github.com/Producdevity/gamehub-lite) as a game-specific fallback.
 - **PC streaming:** on a Windows host, prefer [Artemis](https://github.com/ClassicOldSong/moonlight-android) with [Apollo](https://github.com/ClassicOldSong/Apollo) for automatic virtual-display handling; use official [Moonlight](https://github.com/moonlight-stream/moonlight-android) with [Sunshine](https://github.com/LizardByte/Sunshine) for the conservative cross-platform path.
 - **Android power tuning:** establish a stock baseline, then use [ClusterTune](https://github.com/AurelioB/ClusterTune) for simple CPU caps if needed. Treat [PULSE](https://github.com/keiretrogaming/pulse) as the more complex alternative.
@@ -26,7 +27,8 @@ This order matters because Armada's first internal-storage split **factory-reset
 - [ ] Back up Android data and recovery material.
 - [x] Install the initial emulator apps: RetroArch, DuckStation, HakuX, ScummVM, Dolphin, and XenDroid.
 - [ ] Install only the required RetroArch cores and create the emulation library layout.
-- [ ] Configure and test each emulator directly before adding a launcher/frontend.
+- [ ] Configure and test each emulator directly before adding it to the unified library.
+- [x] Install NeoStation and configure its GameNative Steam frontend-sync marker folder.
 - [ ] Install and test GameNative with a small, known-compatible game.
 - [ ] Configure and test one PC-streaming client/host pair, if needed.
 - [ ] Record a stock Android performance, temperature, fan, and battery baseline.
@@ -100,7 +102,7 @@ These solve different problems:
 | **[F-Droid](https://f-droid.org/en/about/)** | FOSS catalog whose default builds are independently built and signed | Good optional source for [RetroArch](https://f-droid.org/packages/com.retroarch/) or [Lemuroid](https://f-droid.org/packages/com.swordfish.lemuroid/), but its emulator selection is limited |
 | **[Obtainium Emulation Pack](https://github.com/RJNY/Obtainium-Emulation-Pack)** | Community-maintained import file containing many Obtainium source configurations | Useful as a menu or to add selected entries; do not treat every included fork, mirror, nightly, or experimental app as endorsed |
 | **[EmuReady](https://www.emuready.com/listings)** | Community compatibility/settings database | Check title-, device-, emulator-, and version-specific reports; it does not distribute ROMs or replace emulator sources |
-| **ES-DE / Daijishō / Beacon** | Library frontends that scrape metadata and launch other apps | Add one only after each emulator launches games correctly on its own |
+| **NeoStation / ES-DE / Daijishō / other launchers** | Library frontends that organize games and launch other apps | Use NeoStation here; add each emulator only after it launches that system correctly on its own |
 
 Recommended source workflow:
 
@@ -277,18 +279,70 @@ NetherSX2's Patch and Classic variants share the same package identity and canno
 
 [Lemuroid](https://github.com/Swordfish90/Lemuroid) is a much simpler Libretro-based alternative. Use it **instead of** RetroArch if automatic setup matters more than granular cores, shaders, overrides, and frontend integration; installing both adds duplicate scans and saves without much benefit.
 
-### Library, frontend, and backup layout
+### Library, launcher, and backup layout
 
 Use the microSD card as **portable storage** for ROM/disc images so it remains readable on a computer. Have Android format/validate the card, and confirm its filesystem supports files larger than 4 GiB before copying DVD-era images. This Android library card remains separate from the dedicated Armada boot card.
 
-For a console-style launcher, prefer **[ES-DE](https://es-de.org/)** if its paid Android release and highly preconfigured, controller-first UI are worth it. Use free **[Daijishō](https://play.google.com/store/apps/details?id=com.magneticchen.daijishou)** instead for a more Android-native setup, or paid **[Beacon](https://play.google.com/store/apps/details?id=com.radikal.gamelauncher)** for a simpler library. None includes emulators or games.
+#### Android launcher comparison
 
-1. Pick one frontend and let it create its expected `ROMs`/`BIOS` directory structure, or create a stable equivalent before copying the library.
-2. Use one folder per system and consistent filenames. Point every standalone emulator at those shared **game** folders, but let each app manage its own database/cache.
-3. Configure and launch a title inside its emulator first. Only then set the frontend's player/emulator association and test direct launching and clean return to the frontend.
-4. Keep BIOS/firmware/keys out of cloud services unless the service and applicable rights are understood. They are not configuration files to publish.
-5. Locate and export each emulator's **in-game saves, memory cards, configuration, and keys**. A frontend does not centralize these, and Android may delete app-private data on uninstall.
-6. Back up saves separately from the replaceable ROM library. Do not assume cloud sync is conflict-safe while Android and Armada can both modify a save.
+**Decision: use [NeoStation](https://github.com/misobadev/neostation-frontend) first.** It is the best service-independent, open-source match for this mostly GameNative library: GPL-3.0, controller navigable, organized by systems, able to record favorites/play time/last played, and preconfigured to launch GameNative Steam, Epic, GOG, Amazon, and custom-game marker files. It is still beta, so keep the underlying apps usable outside the launcher and back up its database/configuration before major updates.
+
+| Launcher | Android app source/license | GameNative path | Recents and organization | Decision here |
+| --- | --- | --- | --- | --- |
+| **[Argosy](https://github.com/rommapp/argosy-launcher)** | GPL-3.0 source | Deep GameNative and Steam integration | Recent, most played, favorites, collections, platforms | **Do not use without RomM.** Current v2.4.1 onboarding requires a RomM server login despite its README describing local-only use; source has no skip path |
+| **[Cannoli](https://github.com/CannoliHQ/cannoli)** | GPL-3.0 source | No individual GameNative-game integration | Deliberately minimal console/game lists; no game switcher, play tracker, scraper, or themes | Excellent retro-only MinUI-style option, but wrong for this PC-heavy library |
+| **[Cocoon](https://github.com/inssekt/CocoonFE)** | App source/license not published in its public configuration repository | GameNative player definitions; some marker setup is manual | Favorites/recent smart folders, play time, manually ordered pages/grid | Attractive controller-first beta, but not a verifiable FOSS choice |
+| **[Console Launcher](https://github.com/likeich/console-launcher)** | App source/license not published; repository contains themes/configuration | Bundled GameNative launch definitions | Unified apps, games, platforms, and folders with extensive customization | Capable console shell, but source-unavailable and its 2.x line is beta |
+| **[Daijishō](https://github.com/TapiocaFox/Daijishou)** | App is explicitly closed-source; MIT covers the public assets repository | Community GameNative player definitions; marker extensions may need adjustment | Platforms, favorites, genres, activity widgets, and continue-play | Mature and free, but less PC-centric and not open source |
+| **[iiSU](https://github.com/iisu-network/iiSU)** | App source/license not published | GameNative app shortcut; no mature documented per-game integration | Home shortcuts, collections, Android apps, and ES-DE metadata import | Visually polished but still alpha; do not baseline it |
+| **[NeoStation](https://github.com/misobadev/neostation-frontend)** | **GPL-3.0 source** | **Native definitions for GameNative's `.steam`, `.epic`, `.gog`, `.amazon`, and `.pcgame` exports** | Favorites, last played, play time, systems, and collections | **Chosen.** Neutral and FOSS, with the required direct-launch path; accept beta churn |
+| **[Pegasus](https://github.com/mmatyas/pegasus-frontend)** | GPL-3.0 source | Possible with custom metadata and Android intent commands | Favorites/play statistics/last played are available to themes | Mature and flexible, but the most manual configuration and no integrated scraper |
+| **[RetroHrai](https://github.com/retrohrai/Releases)** | Explicitly proprietary | GameNative/GameHub/Winlator shortcuts | Collections, favorites, recent, custom platforms, scraping | Promising public beta, but not open source |
+| **[ES-DE](https://es-de.org/)** | Android release is paid and partially closed-source; desktop releases are GPL | Excellent built-in support for all current GameNative marker types | Automatic Favorites and Last Played, custom collections, sorting, mature themes | Most polished fallback if Android source openness stops being a requirement |
+
+Paid [Beacon](https://play.google.com/store/apps/details?id=com.radikal.gamelauncher) remains a simpler closed-source alternative, not part of the open-source shortlist. A frontend normally updates its last-played history only for games launched through that frontend; launching directly inside GameNative or an emulator may not update NeoStation's history.
+
+#### NeoStation and GameNative setup
+
+NeoStation's configured **ROM folder is the library root**, not GameNative's real Steam installation directory and not the `steam` marker directory itself. The working layout is:
+
+```text
+/storage/emulated/0/ROMs/       # select this directory in NeoStation
+├── steam/
+│   ├── Example Game.steam      # tiny text file containing only its numeric Steam App ID
+│   └── Another Game.steam
+├── epic/                       # *.epic markers
+├── gog/                        # *.gog markers
+├── amazon/                     # *.amazon markers
+├── windows/                    # *.pcgame markers for GameNative custom games
+├── psx/
+└── other-system-folders/
+```
+
+Do **not** point NeoStation at `Android/data/app.gamenative/.../Steam/steamapps/common` or another directory containing the actual PC game installations.
+
+1. Create a lowercase `steam` directory inside the same stable ROM-library root used for the console subfolders. Create `epic`, `gog`, `amazon`, and `windows` only when those sources are needed.
+2. In **GameNative → Settings → Interface → Frontend Sync**, map each source to its matching shared directory:
+   - Steam → `ROMs/steam`
+   - Epic Games → `ROMs/epic`
+   - GOG → `ROMs/gog`
+   - Amazon → `ROMs/amazon`
+   - Custom Game → `ROMs/windows`
+3. Confirm the Frontend Sync dialog and run **Resync all** if offered. GameNative creates one text marker per installed game; for example, `Example Game.steam` contains only that game's numeric app ID. These files are launch records, not game data.
+4. In NeoStation's directory settings, remove any directly selected `steam` directory and select its parent `ROMs` root. NeoStation requires the root to contain recognized system subdirectories such as lowercase `steam`, `psx`, and `gamecube`.
+5. Grant NeoStation the Android file access it requests, update its system definitions, and rescan. The Steam system should appear when at least one valid `.steam` marker exists.
+6. Confirm the Steam system's player is **Standalone GameNative (Steam)**. Use the matching GameNative player for each other store. NeoStation reads the ID from the marker and sends GameNative's `app.gamenative.LAUNCH_GAME` intent with the matching game source.
+7. Launch one installed game from NeoStation, return cleanly, and verify that last-played/play-time data updates. The marker integration was confirmed working on this Odin; individual game compatibility still belongs to GameNative.
+8. If a source does not appear, verify that the marker has the exact extension rather than `.txt`, contains a non-empty ID, sits in the correctly named child directory, and was created before the latest NeoStation rescan.
+
+#### General library and backup rules
+
+1. Use one folder per system and consistent filenames. Point every standalone emulator at those shared **game** folders, but let each app manage its own database/cache.
+2. Configure and launch a title inside its emulator first. Only then set NeoStation's player/emulator association and test direct launching and clean return to the launcher.
+3. Keep BIOS/firmware/keys out of cloud services unless the service and applicable rights are understood. They are not configuration files to publish.
+4. Locate and export each emulator's **in-game saves, memory cards, configuration, and keys**. A launcher does not centralize these, and Android may delete app-private data on uninstall.
+5. Back up saves separately from the replaceable ROM library. Do not assume cloud sync is conflict-safe while Android and Armada can both modify a save.
+6. Back up NeoStation's own configuration/database and scraped media separately. They can be rebuilt, but they contain favorites, player choices, metadata edits, and launch history.
 
 For supported emulators on this Snapdragon/Adreno device, a per-app Mesa **Turnip** driver can sometimes fix a specific rendering issue. Start with the stock Qualcomm driver, add a custom driver only inside the affected emulator, record its exact version per game, and keep a stock-driver profile for recovery. Never flash an emulator Turnip package as a global Android GPU driver. The commonly referenced builds at [AdrenoToolsDrivers](https://github.com/K11MCH1/AdrenoToolsDrivers/releases/) are third-party and a newer build is not automatically better for the Odin 3's GPU. At this review, that project's A8xx support was explicitly “very beta and hacky,” was reported not to work correctly with Switch emulators, and could leave other apps crashing until a reboot; treat the Odin 3's Adreno 830 stock driver as the default.
 
@@ -719,8 +773,9 @@ These are reports, not proof that every Odin 3 or every build is affected. Revie
 | 2026-07-30 | ScummVM | TODO / installed | App installed | Library, controls, and game test pending |
 | 2026-07-30 | Dolphin | TODO / installed | App installed | GameCube/Wii controls, storage, and game tests pending |
 | 2026-07-30 | XenDroid | TODO / installed | App installed | Xbox 360 configuration and game test pending |
-| TODO | Android emulator frontend | TODO / not installed | ES-DE / Daijishō / Beacon | TODO |
-| TODO | GameNative | TODO | Installed/tested | TODO |
+| 2026-07-30 | Argosy | v2.4.1 / evaluated | First-run flow tested | Not selected: current app requires RomM login and exposes no server-free onboarding path |
+| 2026-07-30 | NeoStation | TODO / installed | ROM root and GameNative Steam Frontend Sync configured | `.steam` marker discovery/integration confirmed; version and per-emulator launch tests pending |
+| 2026-07-30 | GameNative | TODO / installed | Steam Frontend Sync configured for NeoStation | Small known-compatible game and cloud-save test pending |
 | TODO | GameHub Lite | TODO / not installed | Fallback test | TODO |
 | TODO | ClusterTune | TODO / not installed | CPU-cap test | TODO |
 | TODO | PULSE | TODO / not installed | Advanced tuning alternative | TODO |
