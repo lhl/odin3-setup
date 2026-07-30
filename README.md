@@ -595,7 +595,7 @@ At the time of this review, the latest release was **v5.1.8**. A newer release s
 
 | Test date | Game/source | GameNative version | Storage | Per-game changes | Observed power | Performance | Result/notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026-07-30 | 140 / Steam `242820` | TODO | TODO | None | TODO | TODO | **Fully working out of the box** |
+| 2026-07-30 | 140 / Steam `242820` | TODO | TODO | None | **≈2 W** | **60 FPS** | **Fully working out of the box** |
 | 2026-07-30 | 2064: Read Only Memories / Steam `330820` | TODO | TODO | None | **<2 W** | **60 FPS** | **Fully working out of the box** |
 | 2026-07-30 | Cairn / Steam `1588550` | TODO | TODO | None | TODO | TODO | **Fully working out of the box** |
 | 2026-07-30 | Celeste / Steam `504230` | TODO | TODO | None | **<2 W** | **60 FPS** | **Fully working out of the box** |
