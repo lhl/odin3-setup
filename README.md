@@ -29,7 +29,7 @@ This order matters because Armada's first internal-storage split **factory-reset
 - [ ] Install only the required RetroArch cores and create the emulation library layout.
 - [ ] Configure and test each emulator directly before adding it to the unified library.
 - [x] Install NeoStation and configure its GameNative Steam frontend-sync marker folder.
-- [ ] Install and test GameNative with a small, known-compatible game.
+- [x] Install and test GameNative: 80 Days launches, but still needs a handheld controller mapping; OlliOlli remains incompatible in testing.
 - [ ] Configure and test one PC-streaming client/host pair, if needed.
 - [ ] Record a stock Android performance, temperature, fan, and battery baseline.
 - [ ] Optionally test one Android tuning tool; do not run ClusterTune and PULSE together.
@@ -581,9 +581,19 @@ At the time of this review, the latest release was **v5.1.8**. A newer release s
 
 ### Android game test log
 
-| Game | Frontend/version | Storage | Container/driver settings | Result | Notes |
-| --- | --- | --- | --- | --- | --- |
-| TODO | TODO | Internal / SD | Defaults | TODO | TODO |
+| Date | Game/source | Frontend/version | Storage | Container/driver settings | Result | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2026-07-30 | 80 Days / Steam `381780` | GameNative / version TODO | TODO | Settings TODO | **Launches and runs** | PC version is keyboard/mouse-only in current testing; configure and validate a Steam Input or GameNative physical-controller mapping |
+| 2026-07-30 | OlliOlli / Steam `274250` | GameNative / version TODO | TODO | See compatibility-problem log below | **Does not run** | Either crashes during launch or reaches a black screen |
+
+### GameNative compatibility-problem log
+
+Record every attempt with a date and change only one variable between runs. “Compatible” is a report, not proof that the same store build, GameNative version, GPU, runtime, driver, and wrapper combination works on the Odin 3.
+
+| Date | Game/source | Compatibility evidence | Config/runtime tests | Graphics/translation tests | Observed result | Next evidence/action |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2026-07-30 | OlliOlli / Steam `274250` | GameNative labels it compatible, but the API result checked this date was only a **fallback**: GOG build on Adreno 650, not Steam on Adreno 830 | Both default and manually applied known config; Proton 9, 10, and 11 | Adreno `v805`, `Turnip_Gen8_V25`, and Turnip Gen8 V30; baseline Vulkan with DXVK `2.4.1-gplasync` | Every tested combination failed: either a launch crash or black screen | Run **Play with Diagnostics**, share/inspect the diagnostic log, record the exact GameNative/runtime package versions and failure stage, then test any wrapper change separately |
+| 2026-07-30 | 80 Days / Steam `381780` | Launch confirmed locally; database match type TODO | Working container settings TODO | Working driver/wrapper settings TODO | Game runs, but no usable native Odin controller path was observed; keyboard/mouse input works | Test GameNative **Use Steam Input** first, then record the final controller-to-keyboard/mouse layout |
 
 ### Storage interaction with Armada
 
@@ -775,7 +785,7 @@ These are reports, not proof that every Odin 3 or every build is affected. Revie
 | 2026-07-30 | XenDroid | TODO / installed | App installed | Xbox 360 configuration and game test pending |
 | 2026-07-30 | Argosy | v2.4.1 / evaluated | First-run flow tested | Not selected: current app requires RomM login and exposes no server-free onboarding path |
 | 2026-07-30 | NeoStation | TODO / installed | ROM root and GameNative Steam Frontend Sync configured | `.steam` marker discovery/integration confirmed; version and per-emulator launch tests pending |
-| 2026-07-30 | GameNative | TODO / installed | Steam Frontend Sync configured for NeoStation | Small known-compatible game and cloud-save test pending |
+| 2026-07-30 | GameNative | TODO / installed | Steam Frontend Sync and initial game testing | 80 Days launches with keyboard/mouse; OlliOlli crashes or black-screens across recorded Proton and driver tests; cloud-save test pending |
 | TODO | GameHub Lite | TODO / not installed | Fallback test | TODO |
 | TODO | ClusterTune | TODO / not installed | CPU-cap test | TODO |
 | TODO | PULSE | TODO / not installed | Advanced tuning alternative | TODO |
