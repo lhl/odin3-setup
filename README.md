@@ -581,22 +581,23 @@ At the time of this review, the latest release was **v5.1.8**. A newer release s
 
 ### GameNative working-game logs
 
-“Out of the box” means the installed game launched and was playable with the Odin controls without a manual per-game runtime, driver, wrapper, or input override. Still record the effective component versions later: changing GameNative's global defaults can make two nominally default installations different.
+“Out of the box” means the installed game launched and was playable with the Odin controls without a manual per-game runtime, driver, wrapper, or input override. Still record the effective component versions later: changing GameNative's global defaults can make two nominally default installations different. Power and performance are observed results, not controlled benchmarks, until the Odin performance/fan mode, brightness, resolution, frame cap, measurement source, and test duration are also recorded.
 
 #### Fully working out of the box
 
-| Test date | Game/source | GameNative version | Storage | Per-game changes | Result/notes |
-| --- | --- | --- | --- | --- | --- |
-| 2026-07-30 | 140 / Steam `242820` | TODO | TODO | None | **Fully working out of the box** |
-| 2026-07-30 | Cairn / Steam `1588550` | TODO | TODO | None | **Fully working out of the box** |
-| 2026-07-30 | FINAL FANTASY VII REMAKE INTERGRADE / Steam `1462040` | TODO | TODO | None | **Fully working out of the box** |
+| Test date | Game/source | GameNative version | Storage | Per-game changes | Observed power | Performance | Result/notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-07-30 | 140 / Steam `242820` | TODO | TODO | None | TODO | TODO | **Fully working out of the box** |
+| 2026-07-30 | Cairn / Steam `1588550` | TODO | TODO | None | TODO | TODO | **Fully working out of the box** |
+| 2026-07-30 | Celeste / Steam `504230` | TODO | TODO | None | **<2 W** | **60 FPS** | **Fully working out of the box** |
+| 2026-07-30 | FINAL FANTASY VII REMAKE INTERGRADE / Steam `1462040` | TODO | TODO | None | TODO | TODO | **Fully working out of the box** |
 
 #### Working with configuration or caveats
 
-| Test date | Game/source | GameNative version | Storage | Required configuration/caveat | Result/notes |
-| --- | --- | --- | --- | --- | --- |
-| 2026-07-30 | 80 Days / Steam `381780` | TODO | TODO | Keyboard/mouse input works, but no usable native Odin controller path was observed; configure and validate Steam Input or a GameNative physical-controller mapping | **Game launches and runs** |
-| 2026-07-30 | Delores: A Thimbleweed Park Mini-Adventure / Steam `1305720` | TODO | TODO | Same input limitation as 80 Days: configure and validate a controller-to-keyboard/mouse mapping | **Game launches and runs** |
+| Test date | Game/source | GameNative version | Storage | Required configuration/caveat | Observed power | Performance | Result/notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-07-30 | 80 Days / Steam `381780` | TODO | TODO | Keyboard/mouse input works, but no usable native Odin controller path was observed; configure and validate Steam Input or a GameNative physical-controller mapping | TODO | TODO | **Game launches and runs** |
+| 2026-07-30 | Delores: A Thimbleweed Park Mini-Adventure / Steam `1305720` | TODO | TODO | Same input limitation as 80 Days: configure and validate a controller-to-keyboard/mouse mapping | TODO | TODO | **Game launches and runs** |
 
 ### GameNative compatibility-problem log
 
@@ -796,7 +797,7 @@ These are reports, not proof that every Odin 3 or every build is affected. Revie
 | 2026-07-30 | XenDroid | TODO / installed | App installed | Xbox 360 configuration and game test pending |
 | 2026-07-30 | Argosy | v2.4.1 / evaluated | First-run flow tested | Not selected: current app requires RomM login and exposes no server-free onboarding path |
 | 2026-07-30 | NeoStation | TODO / installed | ROM root and GameNative Steam Frontend Sync configured | `.steam` marker discovery/integration confirmed; version and per-emulator launch tests pending |
-| 2026-07-30 | GameNative | TODO / installed | Steam Frontend Sync and initial game testing | 140, Cairn, and FFVII Remake Intergrade work out of the box; 80 Days and Delores work with keyboard/mouse; OlliOlli fails across recorded Proton and driver tests; cloud-save tests pending |
+| 2026-07-30 | GameNative | TODO / installed | Steam Frontend Sync and initial game testing | 140, Cairn, Celeste, and FFVII Remake Intergrade work out of the box; 80 Days and Delores work with keyboard/mouse; OlliOlli fails across recorded Proton and driver tests; cloud-save tests pending |
 | TODO | GameHub Lite | TODO / not installed | Fallback test | TODO |
 | TODO | ClusterTune | TODO / not installed | CPU-cap test | TODO |
 | TODO | PULSE | TODO / not installed | Advanced tuning alternative | TODO |
