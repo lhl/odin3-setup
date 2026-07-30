@@ -14,7 +14,7 @@ Personal setup record and recovery runbook for the AYN Odin 3.
 - **Android game launcher:** use GPL-3.0 **[NeoStation](https://github.com/misobadev/neostation-frontend)** for the unified controller-first library and GameNative frontend-sync integration; retain GameNative and every emulator as independently usable apps.
 - **PC games on Android:** start with [GameNative](https://github.com/utkarshdalal/GameNative); keep [GameHub Lite](https://github.com/Producdevity/gamehub-lite) as a game-specific fallback.
 - **PC streaming:** on a Windows host, prefer [Artemis](https://github.com/ClassicOldSong/moonlight-android) with [Apollo](https://github.com/ClassicOldSong/Apollo) for automatic virtual-display handling; use official [Moonlight](https://github.com/moonlight-stream/moonlight-android) with [Sunshine](https://github.com/LizardByte/Sunshine) for the conservative cross-platform path.
-- **Android power tuning:** establish a stock baseline, then use [ClusterTune](https://github.com/AurelioB/ClusterTune) for simple CPU caps if needed. Treat [PULSE](https://github.com/keiretrogaming/pulse) as the more complex alternative.
+- **Android power tuning:** the current device configuration uses [PULSE](https://github.com/keiretrogaming/pulse) for frequency/power control. Do not run ClusterTune or manual underclock scripts alongside it; a stock baseline still needs to be recorded for comparison.
 - **Linux:** test [Armada](https://github.com/virtudude/armada) from a dedicated microSD card first.
 - **Dual boot:** consider an internal Armada/Android split only after both environments have been tested and the storage allocation is clear.
 
@@ -32,7 +32,7 @@ This order matters because Armada's first internal-storage split **factory-reset
 - [x] Install and test GameNative: 80 Days launches, but still needs a handheld controller mapping; OlliOlli remains incompatible in testing.
 - [ ] Configure and test one PC-streaming client/host pair, if needed.
 - [ ] Record a stock Android performance, temperature, fan, and battery baseline.
-- [ ] Optionally test one Android tuning tool; do not run ClusterTune and PULSE together.
+- [x] Configure PULSE for a 60 FPS target, Aggressive Park, Efficient 11 W envelope, Smart Fan, and 60 Hz; do not run ClusterTune alongside it.
 - [ ] Prepare a host computer with current Android Platform-Tools.
 - [ ] Test Armada from a dedicated microSD card.
 - [ ] Verify Android and Armada boot switching.
@@ -486,6 +486,14 @@ Use it instead of—not alongside—ClusterTune when those additional controls a
 
 At this source review, the latest PULSE release was **v1.19.6**. It is newer and broader than ClusterTune, not inherently safer or more efficient for every game.
 
+#### Current PULSE configuration
+
+| Recorded date | PULSE version | FPS target | Core parking | Power tier/envelope | Fan control | Refresh rate | Status |
+| --- | --- | ---: | --- | --- | --- | ---: | --- |
+| 2026-07-30 | TODO | 60 FPS | Aggressive Park | Efficient / 11 W | Smart Fan | 60 Hz | Active current configuration |
+
+The 11 W value is PULSE's software control target/envelope rather than a programmable hardware TDP. Existing per-game power observations do not yet record whether this profile was active; confirm that field before treating them as comparable results.
+
 ### Manual-script fallback
 
 The [original Odin 3 CPU underclock scripts](https://github.com/TheOldTaylor/Odin3-CPU-Underclock) use **Odin settings → Run script as root** and inspired ClusterTune. They are useful for inspecting the simple `sysfs` changes or recovering a minimal workflow, but an app is easier to audit operationally because it displays the active caps. The scripts normally reset on a power cycle. Never apply them while ClusterTune or PULSE automation is active.
@@ -495,7 +503,7 @@ The [original Odin 3 CPU underclock scripts](https://github.com/TheOldTaylor/Odi
 | Date | Game/workload | Tool/profile | FPS/low | Max temperature | Average power/battery change | Fan/noise | Result |
 | --- | --- | --- | ---: | ---: | ---: | --- | --- |
 | TODO | TODO | Stock baseline | TODO | TODO | TODO | TODO | TODO |
-| TODO | TODO | ClusterTune Small | TODO | TODO | TODO | TODO | TODO |
+| 2026-07-30 | Current mixed workloads | PULSE: Efficient / 11 W; Aggressive Park; Smart Fan; 60 Hz | Target 60 / lows TODO | TODO | TODO | Smart Fan / TODO | Active; controlled baseline still pending |
 
 Stop a test if the device shows crashes, display corruption, repeated driver resets, unexpected shutdowns, charging faults, or controls that cannot be restored. Return to stock settings before an Android OTA, before troubleshooting an unrelated issue, and before comparing Armada behavior.
 
@@ -800,8 +808,8 @@ These are reports, not proof that every Odin 3 or every build is affected. Revie
 | 2026-07-30 | NeoStation | TODO / installed | ROM root and GameNative Steam Frontend Sync configured | `.steam` marker discovery/integration confirmed; version and per-emulator launch tests pending |
 | 2026-07-30 | GameNative | TODO / installed | Steam Frontend Sync and initial game testing | 140, 2064: Read Only Memories, Cairn, Celeste, and FFVII Remake Intergrade work out of the box; 80 Days and Delores work with keyboard/mouse; OlliOlli fails across recorded Proton and driver tests; cloud-save tests pending |
 | TODO | GameHub Lite | TODO / not installed | Fallback test | TODO |
-| TODO | ClusterTune | TODO / not installed | CPU-cap test | TODO |
-| TODO | PULSE | TODO / not installed | Advanced tuning alternative | TODO |
+| TODO | ClusterTune | TODO / not installed | CPU-cap test | Not in use; do not run alongside PULSE |
+| 2026-07-30 | PULSE | TODO / installed | Frequency/power profile configured | Active: 60 FPS target, Aggressive Park, Efficient 11 W, Smart Fan, and 60 Hz |
 | TODO | Armada SD | TODO | Flashed and booted | TODO |
 | TODO | ROCKNIX ABL | TODO | Backed up/flashed | TODO |
 | TODO | Armada internal | TODO / not installed | Dual-boot install | TODO |
