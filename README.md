@@ -574,6 +574,19 @@ The Launch Tool integration is useful for a temporary comparison rather than a d
 
 At the time of this review, the latest stable release was **v1.1.1**. Always prefer the current stable release and read its notes; do not pin this setup permanently to that version.
 
+### GameNative per-game tuning ladder
+
+Treat a working exact-device or known configuration as the baseline, not as a collection of independently optimal components. Export it before tuning, change one field at a time, and keep the first configuration that is both correct and efficient. A newer component is a candidate—not an automatic upgrade—and a launch-only check is insufficient: test audio, controls, frame pacing, a demanding area, clean exit, and power draw.
+
+1. **Establish the functional baseline.** Start unchanged with an exact Adreno 830/Odin 3 known config when available; otherwise use the closest credible same-GPU report. Do not replace several components before confirming what already works.
+2. **Update the CPU translator first when performance is poor.** Try the latest stable FEXCore while preserving its known-good preset and every other setting. This was the decisive improvement for Geometry Wars 3 and part of the efficient Hyper Light Drifter result. Keep the older version if the update regresses correctness. FEXCore and Box/Box64 are alternative translation paths for the relevant executable architecture, not upgrades to stack together; compare them only after preserving a working baseline.
+3. **Tune graphics one layer at a time.** On Adreno, test Wrapper-v2 with the latest stable Turnip compatible with Adreno 830. If it crashes or renders incorrectly, retain that Turnip and try Wrapper; if the problem remains, restore the known config and test the System Vulkan driver. Do not change the wrapper and Vulkan driver in the same run. “Latest Turnip” is not universally best—Geometry Wars 3 stopped working when its working graphics path was changed, while Hyper Light Drifter benefited from Turnip Gen8 V30.
+4. **Choose Proton by title, not globally.** Proton 10 ARM64EC is a sensible no-report starting point and the current GameNative path that automatically extracts bundled XAudio/XACT/X3DAudio DLLs; use it first for missing audio. That extraction requires the game's DirectX redistributable files and does not make Proton 10 universally fastest or most compatible. Test Proton 11 for a title-specific improvement, but retain the known version when changing Proton breaks the game.
+5. **Optimize only after correctness.** Compare resolution, full-screen/windowed behavior, frame cap, translation preset, startup-service level, and optional Steam mode separately. Use the performance HUD to distinguish a CPU/translator bottleneck from GPU load, and compare wattage only under the same PULSE profile, display brightness, refresh rate, game scene, and frame cap.
+6. **Record the final exception.** Keep exact Proton, FEXCore or Box/Box64, wrapper, Turnip/System driver, resolution, and any environment-variable changes for every game that differs from its known/default setup.
+
+The practical no-report target is therefore **Proton 10 ARM64EC + current stable FEXCore + Wrapper-v2 + a current Adreno 830-compatible Turnip**, but it is only a starting hypothesis. The working known config always outranks that target, and fallbacks should be tested independently rather than applied as a bundle.
+
 ### GameHub Lite fallback
 
 GameHub Lite is a modified, community-signed build of GameHub rather than a fully source-built application. Treat it as a fallback, not as a second default launcher.
