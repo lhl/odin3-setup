@@ -579,12 +579,24 @@ GameHub Lite is a modified, community-signed build of GameHub rather than a full
 
 At the time of this review, the latest release was **v5.1.8**. A newer release still needs its own security and change-log review.
 
-### Android game test log
+### GameNative working-game logs
 
-| Date | Game/source | Frontend/version | Storage | Container/driver settings | Result | Notes |
-| --- | --- | --- | --- | --- | --- | --- |
-| 2026-07-30 | 80 Days / Steam `381780` | GameNative / version TODO | TODO | Settings TODO | **Launches and runs** | PC version is keyboard/mouse-only in current testing; configure and validate a Steam Input or GameNative physical-controller mapping |
-| 2026-07-30 | OlliOlli / Steam `274250` | GameNative / version TODO | TODO | See compatibility-problem log below | **Does not run** | Either crashes during launch or reaches a black screen |
+“Out of the box” means the installed game launched and was playable with the Odin controls without a manual per-game runtime, driver, wrapper, or input override. Still record the effective component versions later: changing GameNative's global defaults can make two nominally default installations different.
+
+#### Fully working out of the box
+
+| Test date | Game/source | GameNative version | Storage | Per-game changes | Result/notes |
+| --- | --- | --- | --- | --- | --- |
+| 2026-07-30 | 140 / Steam `242820` | TODO | TODO | None | **Fully working out of the box** |
+| 2026-07-30 | Cairn / Steam `1588550` | TODO | TODO | None | **Fully working out of the box** |
+| 2026-07-30 | FINAL FANTASY VII REMAKE INTERGRADE / Steam `1462040` | TODO | TODO | None | **Fully working out of the box** |
+
+#### Working with configuration or caveats
+
+| Test date | Game/source | GameNative version | Storage | Required configuration/caveat | Result/notes |
+| --- | --- | --- | --- | --- | --- |
+| 2026-07-30 | 80 Days / Steam `381780` | TODO | TODO | Keyboard/mouse input works, but no usable native Odin controller path was observed; configure and validate Steam Input or a GameNative physical-controller mapping | **Game launches and runs** |
+| 2026-07-30 | Delores: A Thimbleweed Park Mini-Adventure / Steam `1305720` | TODO | TODO | Same input limitation as 80 Days: configure and validate a controller-to-keyboard/mouse mapping | **Game launches and runs** |
 
 ### GameNative compatibility-problem log
 
@@ -593,7 +605,6 @@ Record every attempt with a date and change only one variable between runs. “C
 | Date | Game/source | Compatibility evidence | Config/runtime tests | Graphics/translation tests | Observed result | Next evidence/action |
 | --- | --- | --- | --- | --- | --- | --- |
 | 2026-07-30 | OlliOlli / Steam `274250` | GameNative labels it compatible, but the API result checked this date was only a **fallback**: GOG build on Adreno 650, not Steam on Adreno 830 | Both default and manually applied known config; Proton 9, 10, and 11 | Adreno `v805`, `Turnip_Gen8_V25`, and Turnip Gen8 V30; baseline Vulkan with DXVK `2.4.1-gplasync` | Every tested combination failed: either a launch crash or black screen | Run **Play with Diagnostics**, share/inspect the diagnostic log, record the exact GameNative/runtime package versions and failure stage, then test any wrapper change separately |
-| 2026-07-30 | 80 Days / Steam `381780` | Launch confirmed locally; database match type TODO | Working container settings TODO | Working driver/wrapper settings TODO | Game runs, but no usable native Odin controller path was observed; keyboard/mouse input works | Test GameNative **Use Steam Input** first, then record the final controller-to-keyboard/mouse layout |
 
 ### Storage interaction with Armada
 
@@ -785,7 +796,7 @@ These are reports, not proof that every Odin 3 or every build is affected. Revie
 | 2026-07-30 | XenDroid | TODO / installed | App installed | Xbox 360 configuration and game test pending |
 | 2026-07-30 | Argosy | v2.4.1 / evaluated | First-run flow tested | Not selected: current app requires RomM login and exposes no server-free onboarding path |
 | 2026-07-30 | NeoStation | TODO / installed | ROM root and GameNative Steam Frontend Sync configured | `.steam` marker discovery/integration confirmed; version and per-emulator launch tests pending |
-| 2026-07-30 | GameNative | TODO / installed | Steam Frontend Sync and initial game testing | 80 Days launches with keyboard/mouse; OlliOlli crashes or black-screens across recorded Proton and driver tests; cloud-save test pending |
+| 2026-07-30 | GameNative | TODO / installed | Steam Frontend Sync and initial game testing | 140, Cairn, and FFVII Remake Intergrade work out of the box; 80 Days and Delores work with keyboard/mouse; OlliOlli fails across recorded Proton and driver tests; cloud-save tests pending |
 | TODO | GameHub Lite | TODO / not installed | Fallback test | TODO |
 | TODO | ClusterTune | TODO / not installed | CPU-cap test | TODO |
 | TODO | PULSE | TODO / not installed | Advanced tuning alternative | TODO |
