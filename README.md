@@ -569,23 +569,46 @@ The Launch Tool integration is useful for a temporary comparison rather than a d
    - audio and frame pacing;
    - sleep/resume behavior;
    - cloud-save upload and download, if the game supports it.
-8. If it fails, export the current container before using **Use known config**, importing an EmuReady JSON, or manually changing settings. Change one path or compatibility setting at a time and record the result below.
-9. Review **Settings → Info → Usage Analytics**. This disables optional analytics, not the mandatory anonymous compatibility events described in the project's README and [privacy policy](https://github.com/utkarshdalal/GameNative/blob/master/PrivacyPolicy/README.md).
+8. If it fails, export the current container before changing it. Record the exact symptom, then run **Test Graphics**; GameNative says the test should show a spinning cube. Use **Diagnostic Run**, reproduce the failure, and retain/review the resulting **Share Diagnostics** log before guessing at components. **Open Container** can confirm the game files/executable and can be used for a one-time manual launch test.
+9. Only then use **Use known config** to re-fetch the current recommendation, import a credible same-GPU config, or change one path/compatibility field at a time. Record each result below.
+10. Review **Settings → Info → Usage Analytics**. This disables optional analytics, not the mandatory anonymous compatibility events described in the project's README and [privacy policy](https://github.com/utkarshdalal/GameNative/blob/master/PrivacyPolicy/README.md).
 
-At the time of this review, the latest stable release was **v1.1.1**. Always prefer the current stable release and read its notes; do not pin this setup permanently to that version.
+At the time of this review, the latest stable release was **v1.1.1**. Always prefer the current stable release and read its notes; do not pin this setup permanently to that version. **Modify Default Config** changes only future containers, not installed games; do not turn a speculative “latest everything” bundle into the global default. The [transcript, source, and community-guide review](research/gamenative-tuning-source-review.md) records how the process below was derived.
+
+### GameNative symptom-directed triage
+
+Do not treat every black screen, crash, stutter, or input problem as a Turnip problem. Preserve the known baseline and use the narrowest relevant path:
+
+| Symptom | First isolated check | Escalation |
+| --- | --- | --- |
+| First launch appears stuck | Wait several minutes; initial prefix/component setup can be slow | If it never completes, run **Test Graphics**, then **Diagnostic Run** |
+| No boot or blank screen | **Test Graphics**: a missing cube points to the basic graphics path; a working cube shifts attention to the executable, runtime, dependency, or game | Restore the baseline; test wrapper, Turnip/System driver, and display renderer separately; use **Open Container** and the diagnostic log |
+| Runs, but misses the FPS/power target | Lower in-game settings first, then test 1280×720 and quick-menu FSR while watching HUD CPU/GPU load | Follow the bottleneck-directed ladder below; do not update the whole stack |
+| Graphical corruption | Reproduce in the same scene and keep the wrapper fixed while testing one Adreno 830-compatible driver | Keep the driver fixed while testing Vulkan, SurfaceFlinger, or GL display rendering; restore known config if each regresses |
+| Entire app closes under load | Reboot/close unrelated background apps and watch RAM in the HUD | Change **Max Device Memory**, Wine video memory, or shader cache only for measured RAM pressure, one control at a time; the blanket “one quarter of RAM” rule is unverified |
+| Missing audio | Try Proton 10 so GameNative can extract its bundled XAudio/XACT/X3DAudio DLLs from the game's DirectX redistributables | Use diagnostics and identify the title's actual audio dependency before changing Win Components |
+| Controls fail | Test GameNative physical mapping; enable Steam Input when needed and ensure GameNative is not in Android Private Space | If mouse clicks specifically fail, the v1.1.1 in-app tip suggests a Proton x86-64 test |
+| `Application Load Error 3:0000065432` | Enable **Unpack Files**; this is the specific use stated by the setting description | Keep it off as a generic performance toggle |
+| DRM, online, or Steam-dependent launch fails | Test the full **Steam Client (Beta)** only after the normal path | It slows launch and reduces performance; experimental Bionic Steam requires a save backup and currently has narrower runtime requirements |
+| Regression after an app/game update | Re-apply **Use known config** and compare the exported pre-update config | Verify game files only after cloud saves are synchronized or backed up, because GameNative warns verification can overwrite saves |
+
+For frame limiting, prefer **the game's own limiter**, then GameNative's **quick-menu limiter**, then `DXVK_FRAME_RATE` only for a DXVK title. A 60 Hz display/PULSE setting is not proof that every windowed or older game is actually capped; confirm the result in the HUD, and cross-check implausible readings with an in-game or Android counter.
 
 ### GameNative per-game tuning ladder
 
 Treat a working exact-device or known configuration as the baseline, not as a collection of independently optimal components. Export it before tuning, change one field at a time, and keep the first configuration that is both correct and efficient. A newer component is a candidate—not an automatic upgrade—and a launch-only check is insufficient: test audio, controls, frame pacing, a demanding area, clean exit, and power draw.
 
-1. **Establish the functional baseline.** Start unchanged with an exact Adreno 830/Odin 3 known config when available; otherwise use the closest credible same-GPU report. Do not replace several components before confirming what already works.
-2. **Update the CPU translator first when performance is poor.** Try the latest stable FEXCore while preserving its known-good preset and every other setting. This was the decisive improvement for Geometry Wars 3 and part of the efficient Hyper Light Drifter result. Keep the older version if the update regresses correctness. FEXCore and Box/Box64 are alternative translation paths for the relevant executable architecture, not upgrades to stack together; compare them only after preserving a working baseline.
-3. **Tune graphics one layer at a time.** On Adreno, test Wrapper-v2 with the latest stable Turnip compatible with Adreno 830. If it crashes or renders incorrectly, retain that Turnip and try Wrapper; if the problem remains, restore the known config and test the System Vulkan driver. Do not change the wrapper and Vulkan driver in the same run. “Latest Turnip” is not universally best—Geometry Wars 3 stopped working when its working graphics path was changed, while Hyper Light Drifter benefited from Turnip Gen8 V30.
-4. **Choose Proton by title, not globally.** Proton 10 ARM64EC is a sensible no-report starting point and the current GameNative path that automatically extracts bundled XAudio/XACT/X3DAudio DLLs; use it first for missing audio. That extraction requires the game's DirectX redistributable files and does not make Proton 10 universally fastest or most compatible. Test Proton 11 for a title-specific improvement, but retain the known version when changing Proton breaks the game.
-5. **Optimize only after correctness.** Compare resolution, full-screen/windowed behavior, frame cap, translation preset, startup-service level, and optional Steam mode separately. Use the performance HUD to distinguish a CPU/translator bottleneck from GPU load, and compare wattage only under the same PULSE profile, display brightness, refresh rate, game scene, and frame cap.
-6. **Record the final exception.** Keep exact Proton, FEXCore or Box/Box64, wrapper, Turnip/System driver, resolution, and any environment-variable changes for every game that differs from its known/default setup.
+1. **Establish the functional baseline.** Start unchanged with an exact Adreno 830/Odin 3 known config when available; otherwise use the closest credible same-GPU report. Leave **Auto-apply known config** enabled for normal use; disable it only for an intentional controlled comparison.
+2. **Classify the bottleneck and cap first.** Use the same demanding scene and HUD. High GPU load points first to in-game graphics, 1280×720, and FSR; low GPU load with poor FPS points more toward translation, game logic, a bad cap, or display delivery. Set the target with the limiter order above before comparing wattage.
+3. **Update the CPU translator only for a CPU/translation symptom.** Try the latest stable FEXCore while preserving the known-good preset and every other setting. This was decisive for Geometry Wars 3 and part of the efficient Hyper Light Drifter result. If a game boots but crashes while loading a later scene, move its preset one step toward compatibility before replacing Proton. FEXCore and Box/Box64 are alternative paths for the relevant executable architecture, not upgrades to stack together.
+4. **Tune graphics one layer at a time.** Stable v1.1.1's Adreno 8 Elite default is **Wrapper + Turnip Gen8 V30**; Wrapper-v2 is an older alternate, not the preferred modern path. Preserve the known driver first. Otherwise test Wrapper with V30, then a supported V25/MrPurple T26 candidate, Wrapper-v2, and System only as separate A/B changes. Test the **display renderer** separately: Vulkan is the stable default, while SurfaceFlinger is an official FPS/latency experiment and GL is a compatibility fallback. “Latest Turnip” is not universally best.
+5. **Match the DirectX translator to the title.** Start with DXVK for DirectX 8/9/10/11 and VKD3D for DirectX 12, but retain a working report's exact version. Native Vulkan/OpenGL games and engine-specific launch arguments need title evidence rather than a generic DX wrapper substitution.
+6. **Choose Proton by title, not globally.** Proton 10 ARM64EC is the current no-report starting point and the XAudio extraction path. Test Proton 11 for a title-specific improvement and Proton x86-64/Box64 for a demonstrated 32-bit, mouse, engine, or compatibility problem; keep the known version when a change regresses the game.
+7. **Optimize only after correctness.** Compare resolution, full-screen/windowed behavior, frame cap, translation preset, startup-service level, and optional Steam mode separately. Keep **Essential** startup and default/all-core affinity unless a title-specific result proves another setting. Compare wattage only under the same PULSE profile, brightness, refresh rate, game scene, and cap.
+8. **Treat LSFG as optional output smoothing, not a fix.** Stable v1.1.1 requires a Bionic container and an owned/installed Lossless Scaling copy, and only claims Adreno 6xx+ support. Record both source FPS and generated output FPS; do not call a generated 60/120 reading native performance. It adds little to the current 60 Hz/60 FPS target when a game already sustains native 60.
+9. **Record the final exception.** Keep exact GameNative version, Proton, FEXCore or Box/Box64 version/preset, wrapper, Turnip/System driver, display renderer, DX wrapper, resolution, cap, game branch/executable/arguments, and any environment or redistributable change.
 
-The practical no-report target is therefore **Proton 10 ARM64EC + current stable FEXCore + Wrapper-v2 + a current Adreno 830-compatible Turnip**, but it is only a starting hypothesis. The working known config always outranks that target, and fallbacks should be tested independently rather than applied as a bundle.
+For stable v1.1.1 on this Odin 3, the practical no-report hypothesis is **Bionic + Proton 10 ARM64EC-2 + FEXCore 2605/Intermediate + Wrapper + Turnip Gen8 V30 + Vulkan display renderer + 1280×720 + Essential startup**, with DXVK for DirectX 8–11 or VKD3D for DirectX 12. It is only a starting hypothesis: the working known config always outranks it, and fallbacks must be tested independently rather than applied as a bundle.
 
 ### GameHub Lite fallback
 
@@ -650,8 +673,8 @@ Record every attempt with a date and change only one variable between runs. “C
 
 | Date | Game/source | Compatibility evidence | Config/runtime tests | Graphics/translation tests | Observed result | Next evidence/action |
 | --- | --- | --- | --- | --- | --- | --- |
-| 2026-07-30 | OlliOlli / Steam `274250` | GameNative labels it compatible, but the API result checked this date was only a **fallback**: GOG build on Adreno 650, not Steam on Adreno 830 | Both default and manually applied known config; Proton 9, 10, and 11 | Adreno `v805`, `Turnip_Gen8_V25`, and Turnip Gen8 V30; baseline Vulkan with DXVK `2.4.1-gplasync` | Every tested combination failed: either a launch crash or black screen | Run **Play with Diagnostics**, share/inspect the diagnostic log, record the exact GameNative/runtime package versions and failure stage, then test any wrapper change separately |
-| 2026-07-30 | POOLS / Steam `2663530` | No working Odin 3 configuration recorded | TODO | Multiple GPU drivers tested; exact versions TODO | Game appears to run at **<3 W**, but rendering remains completely black with every tested driver | Run **Play with Diagnostics**; record the tested Proton, wrapper, and driver versions and whether menus/audio/input operate behind the black image |
+| 2026-07-30 | OlliOlli / Steam `274250` | GameNative labels it compatible, but the API result checked this date was only a **fallback**: GOG build on Adreno 650, not Steam on Adreno 830 | Both default and manually applied known config; Proton 9, 10, and 11 | Adreno `v805`, `Turnip_Gen8_V25`, and Turnip Gen8 V30; baseline Vulkan with DXVK `2.4.1-gplasync` | Every tested combination failed: either a launch crash or black screen | Run **Diagnostic Run**, share/inspect the diagnostic log, record the exact GameNative/runtime package versions and failure stage, then test any wrapper change separately |
+| 2026-07-30 | POOLS / Steam `2663530` | No working Odin 3 configuration recorded | TODO | Multiple GPU drivers tested; exact versions TODO | Game appears to run at **<3 W**, but rendering remains completely black with every tested driver | Run **Diagnostic Run**; record the tested Proton, wrapper, and driver versions and whether menus/audio/input operate behind the black image |
 
 ### Storage interaction with Armada
 
@@ -887,9 +910,13 @@ These are reports, not proof that every Odin 3 or every build is affected. Revie
 
 - [GameNative repository](https://github.com/utkarshdalal/GameNative)
 - [GameNative releases](https://github.com/utkarshdalal/GameNative/releases/latest)
+- [GameNative v1.1.1 release notes](https://github.com/utkarshdalal/GameNative/releases/tag/v1.1.1)
+- [GameNative roadmap](https://github.com/utkarshdalal/GameNative/blob/master/ROADMAP.md)
 - [GameNative compatibility database](https://gamenative.app/compatibility/)
 - [GameNative privacy policy](https://github.com/utkarshdalal/GameNative/blob/master/PrivacyPolicy/README.md)
 - [GameNative third-party notices](https://github.com/utkarshdalal/GameNative/blob/master/THIRD_PARTY_NOTICES)
+- [GameNative tuning transcript/source review](research/gamenative-tuning-source-review.md)
+- [Community GameNative optimization and troubleshooting guide](https://www.reddit.com/r/GameNative/comments/1ugkl4g/how_to_optimize_your_gamenative_settings_and/)
 - [GameHub Lite repository](https://github.com/Producdevity/gamehub-lite)
 - [GameHub Lite releases](https://github.com/Producdevity/gamehub-lite/releases/latest)
 - [GameHub Lite v5.1.8 token-log security fix](https://github.com/Producdevity/gamehub-lite/releases/tag/v5.1.8)
