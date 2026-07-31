@@ -614,6 +614,7 @@ At the time of this review, the latest release was **v5.1.8**. A newer release s
 | 2026-07-30 | DuckTales: Remastered / Steam `237630` | Known config applied; no additional manual changes | **≈2 W** | **60 FPS** | **Fully working out of the box with known config** |
 | 2026-07-30 | FINAL FANTASY VII REMAKE INTERGRADE / Steam `1462040` | None | TODO | TODO | **Fully working out of the box** |
 | 2026-07-30 | FPV.SkyDive / Steam `1278060` | Known config applied; no additional manual changes | **<4 W** | **60 FPS** | **Fully working out of the box with known config** |
+| 2026-07-30 | Loop Hero / Steam `1282730` | Known config applied with the current latest-default components | **≈2–2.5 W** | **60 FPS** | **Fully working out of the box with known config** |
 | 2026-07-30 | Super Hexagon / Steam `221640` | None | **<2 W** | **60 FPS** | **Fully working out of the box** |
 | 2026-07-30 | Tetris Effect: Connected / Epic Games | None | **<4 W** | **60 FPS** | **Fully working out of the box** |
 
