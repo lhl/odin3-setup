@@ -631,6 +631,7 @@ At the time of this review, the latest release was **v5.1.8**. A newer release s
 | 2026-07-30 | Hyper Light Drifter / Steam `257850` | Proton 11 ARM64EC; Turnip Gen8 V30; FEXCore 2605 | **≈2–3 W** | **60 FPS** | **Works well with the recorded configuration.** The previous configuration consumed ≈9 W and could not sustain 60 FPS |
 | 2026-07-30 | Koral / Steam `896750` | Effective configuration TODO; audio is completely absent | **≈4 W** | **60 FPS** | **Runs smoothly but without sound; XAudio troubleshooting pending** |
 | 2026-07-30 | Later Alligator / Steam `966320` | Map the physical controller to mouse input | **<2 W** | **60 FPS** | **Works after configuring controller-to-mouse input** |
+| 2026-07-30 | Oxenfree / Steam `388880` | Known config baseline; current default components and Proton 11 also work; map the physical controller to mouse input | TODO | TODO | **Runs correctly after configuring controller-to-mouse input** |
 | 2026-07-30 | STEINS;GATE / Steam `412830` | Started from **Use Known Config** (including Proton 9 ARM64EC and System GPU driver); 1280×720 container; **Unpack Files** enabled; FEXCore updated to 2605; launcher set to Windowed, then Full Screen selected from the game's own menu after launch | **<2 W** | **60 FPS** | **Works after substantial configuration.** Does not require the Steam client with Unpack enabled; selecting Full Screen in the external launcher produces a black screen |
 
 ##### STEINS;GATE launch sequence
